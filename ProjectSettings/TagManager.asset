@@ -41,6 +41,3 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
-  - name: NewUIElements
-    uniqueID: 4007001385
-    locked: 0
