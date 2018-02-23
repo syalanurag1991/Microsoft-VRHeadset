@@ -51,6 +51,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 36fa154b91f43ab42a7cb160ca63dce3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  HealthBarCoordinates: {x: 0, y: 0, z: 0}
-  healthBarColor: {r: 0, g: 0, b: 0, a: 0}
-  healthBarSize: {x: 0, y: 0, z: 0}
+  gameManager: {fileID: 0}
+  uIManager: {fileID: 0}
+  facialEmotionAnalyzerObject: {fileID: 0}
+  wordSentimentEmotionAnalyzerObject: {fileID: 0}
+  vocalEmotionAnalyzerObject: {fileID: 0}
+  useFacialEmotion: 1
+  useWordSentimentEmotion: 0
+  useVocalToneEmotion: 0

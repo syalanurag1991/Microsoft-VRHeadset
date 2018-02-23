@@ -1,0 +1,15 @@
+﻿<Properties StartupItem="Assembly-CSharp.csproj">
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="Unity.Instance.Unity Editor" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\NewScripts\UIManager.cs">
+    <Files>
+      <File FileName="Assets\GameManager.cs" Line="112" Column="2" />
+      <File FileName="Assets\NewScripts\UIManager.cs" Line="52" Column="62" />
+      <File FileName="Assets\NewElements\Player\HealthCube.cs" Line="34" Column="121" />
+      <File FileName="Assets\NewElements\DisplayPipe\DisplayWebCamOutput.cs" Line="26" Column="67" />
+    </Files>
+  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore />
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+</Properties>

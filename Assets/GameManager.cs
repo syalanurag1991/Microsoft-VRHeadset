@@ -4,143 +4,159 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour {
 
-	public Vector3 HealthBarCoordinates = new Vector3(0, 0, 0);
-	public Vector3 HealthCubeCoordinates = new Vector3(0, 0, 0);
-	public Color healthBarColor;
-	public Color healthCubeColor;
-	public Vector3 healthBarSize;
-	public Vector3 healthCubeSize;
-	float healthbBarSizeOld = 0f;
-	float healthbCubeSizeOld = 0f;
+	public GameObject gameManager;
+	public GameObject uIManager;
 
-	public Camera mainCamera;
-	public Transform mainCameraTransform;
-	public Vector3 mainCameraPosition;
-	public Quaternion mainCameraRotation;
-	public Vector3 gazeDirection;
+	public GameObject facialEmotionAnalyzerObject;
+	public GameObject wordSentimentEmotionAnalyzerObject;
+	public GameObject vocalEmotionAnalyzerObject;
+
+	private UIManager uiManagerScript;
+	private FacialEmotionAnalyzer facialAnalyzer;
+	// private WordSentimentEmotionAnalyzer wordAnalyzer;
+	// private VocalEmotionAnalyzer vocalAnalyzer;
+
+	// Flags for enabling and disabling certain emotion analysis features
+	public bool useFacialEmotion = false;
+	public bool useWordSentimentEmotion = false;
+	public bool useVocalToneEmotion = false;
+
+	public EmotionStruct currentCumulativeEmotion;
+	// Emotions
+	public float currentJoy;
+	public float currentFear;
+	public float currentDisgust;
+	public float currentSadness;
+	public float currentAnger;
+	public float currentSurprise;
+	/////////////////////////////////////////////////////
+
+	private float emotionThreshold = 20.0f;
 
 	// Use this for initialization
 	void Start () {
-		SetHealthBarSize (160f);
-		SetHealthCubeSize (160f);
+		// Initialize the current emotion
+		currentCumulativeEmotion = new EmotionStruct();
 
-		mainCamera = FindObjectOfType<Camera> ();
-		mainCameraTransform = mainCamera.transform;
+		uiManagerScript = uIManager.GetComponent<UIManager> ();
+
+		// Find the script for facial emotion analysis
+		try {
+			facialAnalyzer = (FacialEmotionAnalyzer) facialEmotionAnalyzerObject.GetComponent(typeof(FacialEmotionAnalyzer)); // this seems to fail silently...
+		}
+		catch (System.Exception) {
+			Debug.Log("Unable to find facial emotion analyzer. This functionality will be disabled.");
+			useFacialEmotion = false;
+		}
 	}
-	
+
 	// Update is called once per frame
 	void Update () {
-		mainCameraPosition = mainCamera.transform.position;
-		mainCameraRotation = mainCamera.transform.rotation;
-		gazeDirection = mainCamera.transform.forward;
-		Debug.Log (mainCameraPosition);
-		Debug.Log (mainCameraRotation);
-		Debug.Log (gazeDirection);
+		// Calculate a synthesized emotional state for the user
+		calculateCumulativeEmotion();
+		CalculateMoodTrackerGeometry ();
+
+		currentJoy = currentCumulativeEmotion.joy;
+		currentFear = currentCumulativeEmotion.fear;
+		currentDisgust = currentCumulativeEmotion.disgust;
+		currentSadness = currentCumulativeEmotion.sadness;
+		currentAnger = currentCumulativeEmotion.anger;
+		currentSurprise = currentCumulativeEmotion.surprise;
+
+
 	}
 
-	public void SetHealthBarCoordinates(float xValue, float yValue, float newSize){
-		//float tempY =  (((newSize/125.0f)*1000.0f)-(1.0f*yValue))/200;
-		//float deltaSize = newSize - healthbBarSizeOld;
-		//float deltaY = deltaSize;
-		//Debug.Log ("Delta Y: " + deltaY);
-		//float tempY =  (300.0f + (newSize/1.5f) - (yValue*50f/newSize))/100;
-		float tempY =  (600.0f + (newSize/1.5f) - (yValue))/100;
-		//Debug.Log ("Get Y Scale       = " + (0.003f*newSize));
-		//Debug.Log ("Get Y Coordinate = " + (yValue/200));
-		//Debug.Log ("Set Y Coordinate = " + tempY);
-		HealthBarCoordinates.x = (xValue-675.0f)/100;
-		HealthBarCoordinates.y = tempY;
-		HealthBarCoordinates.z = -1f*(newSize / 200f);
 
-		healthbBarSizeOld = newSize;
-	}
 
-	public void SetHealthBarColor(Color newHealthBarColor){
-		healthBarColor = newHealthBarColor;
-	}
+	///////////////////////////////////////// SET/CALCULATE CUMULATIVE EMOTION START ////////////////////////////////////////////////////
 
-	public void SetHealthBarSize(float newSize){
+	// Returns a final emotion based on the emotion input types that are specified using a simple weighted average.
+	public void calculateCumulativeEmotion() {
 
-		if (newSize > 125f) {
-			newSize = 125f;	
+		EmotionStruct emotionSum = new EmotionStruct();
+		int numEmotionModes = 0;
+
+		if (useFacialEmotion) {
+			EmotionStruct facialEmotions = facialAnalyzer.getCurrentEmotions();
+			emotionSum.joy += facialEmotions.joy;
+			emotionSum.sadness += facialEmotions.sadness;
+			emotionSum.anger += facialEmotions.anger;
+			emotionSum.fear += facialEmotions.fear;
+			emotionSum.disgust += facialEmotions.disgust;
+			emotionSum.surprise += facialEmotions.surprise;
+
+			numEmotionModes++;
+		}
+		if (useWordSentimentEmotion) {
+			Debug.Log("Need to implement emotion from word sentiment.");
+		}
+		if (useVocalToneEmotion) {
+			Debug.Log("Need to implement emotion from vocal tone.");
 		}
 
-		healthBarSize.x = 0.0002f*125;
-		healthBarSize.y = 0.0003f*125;
-		healthBarSize.z = 1;
-		//healthBarSize.x = 0.0002f*newSize;
-		//healthBarSize.y = 0.0003f*newSize;
-	}
-
-	///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	public void SetHealthCubeCoordinates(float xValue, float yValue, float newSize){
-
-		//Debug.Log ("x: " + xValue);
-		//Debug.Log ("y: " + yValue);
-
-		// Camera feed parameters
-		float feedWidth = 1280f;
-		float feedHeight = 720f;
-
-
-		float flipFactorX = 1f;
-		float flipFactorY = 1f;
-
-		//Mapping - Camera feed to Mixed Reality Worldspace
-		//Offset X/Y to make cube appear above face and 
-		//incline towards a side(20%/40% screewidth.height)
-		//Account for Horizontal flip and Vertical flip
-
-		/*
-		// for width = 640 and height = 480
-		float scaleY = 100f;
-		float scaleX = 80f;
-		float offsetXpercent = 0.05f;
-		float offsetYpercent = 0.05f;
-		*/
-
-		// for width = 1280 and height = 720
-		float scaleX = 128f;
-		float scaleY = 72f;
-		float offsetXpercent = 0.05f;
-		float offsetYpercent = 0.05f;
-
-
-		float originX = feedWidth / 2f;
-		float originY = feedHeight / 2f;
-
-		//Mapping detected facial coordinates to Worldspace
-		float recenterX = flipFactorX*(xValue - originX);
-		float recenterY = flipFactorY*(yValue - originY);
-
-		float offsetX = offsetXpercent * feedWidth;
-		float offsetY = offsetYpercent * feedHeight;
-
-		//Normalizing final Coordinates
-		float normalizeX = (recenterX + offsetX)/scaleX;
-		float normalizeY = (recenterY + offsetY)/scaleY;
-
-		HealthCubeCoordinates.x = normalizeX;
-		HealthCubeCoordinates.y = normalizeY;
-		HealthCubeCoordinates.z = 10f;
-
-		healthbCubeSizeOld = newSize;
-	}
-
-	public void SetHealthCubeColor(Color newHealthCubeColor){
-		healthCubeColor = newHealthCubeColor;
-	}
-
-	public void SetHealthCubeSize(float newSize){
-
-		if (newSize > 125f) {
-			newSize = 125f;	
+		if (numEmotionModes > 0) {
+			currentCumulativeEmotion.joy = emotionSum.joy / (float) numEmotionModes;
+			currentCumulativeEmotion.sadness = emotionSum.sadness / (float) numEmotionModes;
+			currentCumulativeEmotion.anger = emotionSum.anger / (float) numEmotionModes;
+			currentCumulativeEmotion.fear = emotionSum.fear / (float) numEmotionModes;
+			currentCumulativeEmotion.disgust = emotionSum.disgust / (float) numEmotionModes;
+			currentCumulativeEmotion.surprise = emotionSum.surprise / (float) numEmotionModes;
 		}
 
-		healthCubeSize.x = 0.0002f*125;
-		healthCubeSize.y = 0.0003f*125;
-		healthCubeSize.z = 1;
-		//healthCubeSize.x = 0.0002f*newSize;
-		//healthCubeSize.y = 0.0003f*newSize;
 	}
+
+	////////////////////////////////////////// SET/CALCULATE CUMULATIVE EMOTION END /////////////////////////////////////////////////////
+
+
+	////////////////////////////////////////// GET/RETURN CUMULATIVE EMOTION START //////////////////////////////////////////////////////
+
+	// Returns a color to be used by the user interface based on the current synthesized emotion
+	public Color getCurrentCumulativeEmotionColor() {
+		if (currentCumulativeEmotion.joy > currentCumulativeEmotion.fear &&
+			currentCumulativeEmotion.joy > currentCumulativeEmotion.disgust &&
+			currentCumulativeEmotion.joy > currentCumulativeEmotion.sadness && 
+			currentCumulativeEmotion.joy > currentCumulativeEmotion.anger && 
+			currentCumulativeEmotion.joy > currentCumulativeEmotion.surprise &&
+			currentCumulativeEmotion.joy > emotionThreshold) {
+			return new Color(0.0f, 1.0f, 0.0f, 1.0f);		// green
+		}
+		else if (currentCumulativeEmotion.fear > currentCumulativeEmotion.disgust &&
+			currentCumulativeEmotion.fear > currentCumulativeEmotion.sadness &&
+			currentCumulativeEmotion.fear > currentCumulativeEmotion.anger &&
+			currentCumulativeEmotion.fear > currentCumulativeEmotion.surprise &&
+			currentCumulativeEmotion.fear > emotionThreshold) {
+			return new Color(1.0f, 0.0f, 1.0f, 1.0f);		// magenta
+		}
+		else if (currentCumulativeEmotion.disgust > currentCumulativeEmotion.sadness &&
+			currentCumulativeEmotion.disgust > currentCumulativeEmotion.anger &&
+			currentCumulativeEmotion.disgust > currentCumulativeEmotion.surprise &&
+			currentCumulativeEmotion.disgust > emotionThreshold) {
+			return new Color(1.0f, 1.0f, 0.0f, 1.0f);		// yellow
+		}
+		else if (currentCumulativeEmotion.sadness > currentCumulativeEmotion.anger &&
+			currentCumulativeEmotion.sadness > currentCumulativeEmotion.surprise &&
+			currentCumulativeEmotion.sadness > emotionThreshold) {
+			return new Color(0.0f, 0.0f, 1.0f, 1.0f);		// blue
+		}
+		else if (currentCumulativeEmotion.anger > currentCumulativeEmotion.surprise &&
+			currentCumulativeEmotion.anger > emotionThreshold) {
+			return new Color(1.0f, 0.0f, 0.0f, 1.0f);		// red
+		}
+		else if(currentCumulativeEmotion.surprise > emotionThreshold) {
+			return new Color(1.0f, 1.0f, 1.0f, 1.0f);		// white
+		}
+		else {
+			return new Color(0.0f, 0.0f, 0.0f, 1.0f);		// black
+		}
+	}
+
+	////////////////////////////////////// SET/CALCULATE MOOD TRACKER COORDINATES START /////////////////////////////////////////////////
+
+	private void CalculateMoodTrackerGeometry (){
+		Vector3 moodTrackerCoordinates = facialAnalyzer.GetMoodTrackerGeometry ();
+		uiManagerScript.SetMoodTrackerGeometry (moodTrackerCoordinates);
+	}
+
+	/////////////////////////////////////// SET/CALCULATE MOOD TRACKER COORDINATES END //////////////////////////////////////////////////
+
 }

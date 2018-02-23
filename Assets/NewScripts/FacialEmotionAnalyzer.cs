@@ -7,6 +7,7 @@ using Affdex;
 public class FacialEmotionAnalyzer : ImageResultsListener {
 
 	public EmotionStruct currentEmotions;
+	private Vector3 moodTrackerParameters;
 
 	// Use this for initialization
 	void Start () {
@@ -38,8 +39,7 @@ public class FacialEmotionAnalyzer : ImageResultsListener {
     {
         Debug.Log("Got face results");
 
-        foreach (KeyValuePair<int, Face> pair in faces)
-        {
+        foreach (KeyValuePair<int, Face> pair in faces) {
             int FaceId = pair.Key;  // The Face Unique Id.
             Face face = pair.Value;    // Instance of the face class containing emotions, and facial expression values.
 
@@ -59,12 +59,21 @@ public class FacialEmotionAnalyzer : ImageResultsListener {
 
 
             //Retrieve the Interocular distance, the distance between two outer eye corners.
-            // currentInterocularDistance = face.Measurements.interOcularDistance;
+            float currentInterocularDistance = face.Measurements.interOcularDistance;
 
+			//Retrieve the coordinates of the facial landmarks (face feature points)
+			FeaturePoint[] featurePointsList = face.FeaturePoints;
+			Measurements measurementsList = face.Measurements;
 
-            //Retrieve the coordinates of the facial landmarks (face feature points)
-            // featurePointsList = face.FeaturePoints;
+			moodTrackerParameters.x = featurePointsList [12].x;
+			moodTrackerParameters.y = featurePointsList [12].y;
+			moodTrackerParameters.z = measurementsList.interOcularDistance;
 
         }
     }
+
+	public Vector3 GetMoodTrackerGeometry (){
+		return moodTrackerParameters;
+	}
+
 }
