@@ -18,8 +18,13 @@ namespace Affdex.Editor
             detector.startOnWake = EditorGUILayout.Toggle("Start on Awake", detector.startOnWake);
             // don't expose discrete flag yet.  We only support non-discrete currently.
             //detector.discrete = EditorGUILayout.Toggle("Discrete Frames", detector.discrete);
-            detector.emotions = (Emotions)EditorGUILayout.EnumMaskField("Emotions", detector.emotions);
-            detector.expressions = (Expressions)EditorGUILayout.EnumMaskField("Expressions", detector.expressions);
+            //detector.emotions = (Emotions)EditorGUILayout.EnumMaskField("Emotions", detector.emotions);
+            //detector.expressions = (Expressions)EditorGUILayout.EnumMaskField("Expressions", detector.expressions);
+
+
+			//Anurag cnages this, EnumMaskField is not supported anymore
+			detector.emotions = (Emotions)EditorGUILayout.EnumFlagsField("Emotions", detector.emotions);
+			detector.expressions = (Expressions)EditorGUILayout.EnumFlagsField("Expressions", detector.expressions);
 
             
         }

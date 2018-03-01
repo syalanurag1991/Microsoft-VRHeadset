@@ -1,0 +1,2 @@
+1. Disabled logs from Dectector.cs
+2. Made a change in DetectorEditor.cs "EnumMaskField is not supported anymore"

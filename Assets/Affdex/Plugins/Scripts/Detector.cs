@@ -356,7 +356,7 @@ namespace Affdex
                 Emotions targetEmotion = (Emotions)i;
                 if (emotions.On(targetEmotion))
                 {
-                    Debug.Log(targetEmotion + " is on");
+                    //Debug.Log(targetEmotion + " is on");
                     nativePlatform.SetEmotionState(i, true);
                 }
             }

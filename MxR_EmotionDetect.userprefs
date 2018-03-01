@@ -2,10 +2,11 @@
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="Unity.Instance.Unity Editor" />
   <MonoDevelop.Ide.Workbench ActiveDocument="Assets\NewScripts\UIManager.cs">
     <Files>
-      <File FileName="Assets\GameManager.cs" Line="112" Column="2" />
-      <File FileName="Assets\NewScripts\UIManager.cs" Line="52" Column="62" />
-      <File FileName="Assets\NewElements\Player\HealthCube.cs" Line="34" Column="121" />
-      <File FileName="Assets\NewElements\DisplayPipe\DisplayWebCamOutput.cs" Line="26" Column="67" />
+      <File FileName="Assets\GameManager.cs" Line="82" Column="49" />
+      <File FileName="Assets\NewScripts\UIManager.cs" Line="117" Column="32" />
+      <File FileName="Assets\NewScripts\FacialEmotionAnalyzer.cs" Line="49" Column="69" />
+      <File FileName="Assets\Affdex\Plugins\Scripts\CameraInput.cs" Line="86" Column="23" />
+      <File FileName="Assets\NewScripts\HealthCube.cs" Line="10" Column="2" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>

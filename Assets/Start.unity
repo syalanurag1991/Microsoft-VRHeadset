@@ -124,8 +124,6 @@ GameObject:
   - component: {fileID: 12639797}
   - component: {fileID: 12639796}
   - component: {fileID: 12639795}
-  - component: {fileID: 12639794}
-  - component: {fileID: 12639793}
   m_Layer: 0
   m_Name: Plane
   m_TagString: Untagged
@@ -133,29 +131,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &12639793
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 12639792}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f41bb0ddc531f4f9c9414fcdaf703487, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  flipVertical: 0
---- !u!114 &12639794
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 12639792}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4379f84059cbca74b8b08fbde999a5a1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!23 &12639795
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -406,14 +381,18 @@ MonoBehaviour:
   mainCamera: {fileID: 605515144}
   inputDeviceCamera: {fileID: 1471319792}
   webcamRenderPlane: {fileID: 12639792}
-  displayHeight: 0.5625
-  flipHorizontal: 0
-  flipVertical: 0
-  colorUpdateTime: 0.5
-  lerpTime: 0.25
   normalizedMoodTrackerCoordinates: {x: 0, y: 0, z: 0}
   moodTrackerSize: {x: 0, y: 0, z: 0}
   moodTrackerColor: {r: 0, g: 0, b: 0, a: 0}
+  offsetX: 0
+  offsetY: 8
+  scaleXpercent: 0.1
+  scaleYpercent: 0.1
+  colorUpdateTime: 0
+  lerpTime: 0
+  displayHeight: 0.54
+  flipHorizontal: 0
+  flipVertical: 0
 --- !u!4 &871687472
 Transform:
   m_ObjectHideFlags: 0
@@ -471,10 +450,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b58a41d2cccbef14fbba41225e469907, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sampleRate: 20
+  sampleRate: 30
   isFrontFacing: 1
-  targetWidth: 1280
-  targetHeight: 720
+  targetWidth: 640
+  targetHeight: 480
 --- !u!114 &1471319795
 MonoBehaviour:
   m_ObjectHideFlags: 0

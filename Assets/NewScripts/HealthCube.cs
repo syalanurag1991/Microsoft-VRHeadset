@@ -7,13 +7,11 @@ public class HealthCube : MonoBehaviour {
 	UIManager uiManager;
 
 	// Mood Tracker Attributes
-	Material moodTrackerMaterial;
 	Renderer moodTrackerRenderer;
 
 	// Use this for initialization
 	void Start () {
 		uiManager = FindObjectOfType<UIManager> ();
-		moodTrackerMaterial = gameObject.GetComponent<Renderer> ().material;
 		moodTrackerRenderer = gameObject.GetComponent<Renderer> ();
 
 		/*

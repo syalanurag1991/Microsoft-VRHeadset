@@ -68,7 +68,6 @@
      <Compile Include="Assets\Affdex\Plugins\Scripts\VideoFileInput.cs" />
      <Compile Include="Assets\Affdex\Plugins\Scripts\WindowsNativePlatform.cs" />
      <Compile Include="Assets\GameManager.cs" />
-     <Compile Include="Assets\MixedReality\CamInit.cs" />
      <Compile Include="Assets\MixedReality\FollowGaze.cs" />
      <Compile Include="Assets\MixedReality\RotateMe.cs" />
      <Compile Include="Assets\NewScripts\DisplayWebCamOutput.cs" />

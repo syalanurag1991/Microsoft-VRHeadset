@@ -53,15 +53,11 @@ public class FacialEmotionAnalyzer : ImageResultsListener {
             face.Emotions.TryGetValue(Emotions.Anger, out currentEmotions.anger);
             face.Emotions.TryGetValue(Emotions.Surprise, out currentEmotions.surprise);
             
-
-            //Retrieve the Smile Score
+			//Retrieve the Smile Score
             // face.Expressions.TryGetValue(Expressions.Smile, out currentSmile);
 
-
-            //Retrieve the Interocular distance, the distance between two outer eye corners.
-            float currentInterocularDistance = face.Measurements.interOcularDistance;
-
-			//Retrieve the coordinates of the facial landmarks (face feature points)
+			//Retrieve the Interocular distance, the distance between two outer eye corners.
+            //Retrieve the coordinates of the facial landmarks (face feature points)
 			FeaturePoint[] featurePointsList = face.FeaturePoints;
 			Measurements measurementsList = face.Measurements;
 
